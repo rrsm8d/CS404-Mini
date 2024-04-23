@@ -12,9 +12,10 @@ private:
 public:
     Graph(int vertices);
     void addEdge(int src, int dest);
-    void DFS(int vertex);
-    void BFS(int vertex);
+    void DFS(int startingVertex);
+    void BFS(int startingVertex);
     void setTraversalOption(bool option) { this->printTraversal = option; }
+    int getVertexCount() { return this->vertexCount; }
 private:
 };
 

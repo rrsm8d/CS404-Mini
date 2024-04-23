@@ -8,61 +8,66 @@ Graph::Graph(int vertices) {
     this->adjLists.resize(vertices);
 }
 
-// Add edges
+// Add edges for nodes
 void Graph::addEdge(int src, int dest) {
     this->adjLists[src].push_back(dest);
+    this->adjLists[dest].push_back(src); // For undirected graph
 }
 
 // DFS algorithm
 void Graph::DFS(int startingVertex) {
-    std::vector<bool> visitedVertices(this->vertexCount, false);
 
     std::stack<int> stack;
+    std::vector<bool> visitedVertices(this->vertexCount, false);
     stack.push(startingVertex);
+    int currentVertex;
 
     while(!stack.empty()) {
-        int currentVertex = stack.top();
+
+        currentVertex = stack.top();
         stack.pop();
 
-        // If vertex not visited yet
+        // If vertex not visited yet, add to traversal list
         if (!visitedVertices[currentVertex]) {
-            if(this->printTraversal) // Optionally print traversal path
-                std::cout << currentVertex << " ";
-            visitedVertices[currentVertex] = true;
-        }
 
-        // Visit adjacent vertices and push onto stack for searching
-        for (int neighbor : adjLists[currentVertex]) {
-            stack.push(neighbor);
+             visitedVertices[currentVertex] = true;
+            // Optional print path taken
+            if(this->printTraversal)
+                std::cout << currentVertex << " ";
+
+            // Add the adjacent vertices to stack
+            for (int neighbor : adjLists[currentVertex])
+                stack.push(neighbor);
         }
     }
-    std::cout << std::endl;
+    //std::cout << std::endl;
 }
 
 // Breadth First Search traversal from a given source vertex
-void Graph::BFS(int start) {
-    // Vector to keep track of visited vertices
-    std::vector<bool> visitedVertices(this->vertexCount, false);
+void Graph::BFS(int startingVertex) {
 
     std::queue<int> queue;
-    // Enqueue the start vertex
-    queue.push(start);
-    visitedVertices[start] = true;
+    std::vector<bool> visitedVertices(this->vertexCount, false);
+    queue.push(startingVertex);
+    int currentVertex;
 
     while (!queue.empty()) {
-        // Dequeue a vertex from queue
-        int currentVertex = queue.front();
-        queue.pop();
-        if(this->printTraversal)
-            std::cout << currentVertex << " ";
 
-        // Visit all adjacent vertices of dequeued vertex
-        for (int neighbor : adjLists[currentVertex]) {
-            if (!visitedVertices[neighbor]) {
-                visitedVertices[neighbor] = true;
+        currentVertex = queue.front();
+        queue.pop();
+
+        // If vertex not visited yet, add to traversal list
+        if (!visitedVertices[currentVertex]) {
+
+            visitedVertices[currentVertex] = true;
+            // Optional print path taken
+            if(this->printTraversal)
+                std::cout << currentVertex << " ";
+
+            // Add the adjacent vertices to queue
+            for (int neighbor : adjLists[currentVertex])
                 queue.push(neighbor);
-            }
         }
     }
-    std::cout << std::endl;
+    //std::cout << std::endl;
 }
